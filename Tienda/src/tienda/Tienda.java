@@ -25,8 +25,6 @@ public class Tienda {
         libre = 0;
     }
 
-    
-
     public int getProductosRestantes() {
         return (MAX - libre);
     }
@@ -38,7 +36,8 @@ public class Tienda {
     public boolean estaLleno() {
         return (libre == MAX);
     }
-        public boolean hayProductos() {
+
+    public boolean hayProductos() {
         return (libre > 0);
     }
 
@@ -49,7 +48,7 @@ public class Tienda {
      * @param producto
      * @throws ArrayIndexOutOfBoundsException
      */
-    public boolean ExisteProducto(Producto x) {
+    public boolean existeProducto(Producto x) {
         boolean ret = false;
         if (hayEspacio()) {
             for (int i = 0; i < libre; i++) {
@@ -60,38 +59,70 @@ public class Tienda {
         }
         return ret;
     }
-    
-    public StringBuilder BuscarProductosPorNombre(String nombre){
-        StringBuilder Productos= new StringBuilder();
+
+    public StringBuilder buscarProductosPorNombre(String nombre) {
+        StringBuilder Productos = new StringBuilder();
         if (hayEspacio()) {
             for (int i = 0; i < libre; i++) {
-                if (nombre==productos[i].getNombre()) {
+                if (nombre == productos[i].getNombre()) {
                     Productos.append(productos[i]);
                 }
             }
-        }
-        else{
-        Productos.append("No existe el producto en la base de datos.");
+        } else {
+            Productos.append("No existe el producto en la base de datos.");
         }
         return Productos;
     }
-  public static Producto leeProducto(Scanner scan) {
+
+    public StringBuilder buscarProductosPorCodigo(int codigo) {
+        StringBuilder Productos = new StringBuilder();
+        if (hayEspacio()) {
+            for (int i = 0; i < libre; i++) {
+                if (codigo == productos[i].getCodigo()) {
+                    Productos.append(productos[i]);
+                }
+            }
+        } else {
+            Productos.append("No existe el producto en la base de datos.");
+        }
+        return Productos;
+    }
+
+    public int buscarProductosPorCodigoDevuelvePos(int codigo) {
+        int pos = -1;
+        if (hayProductos()) {
+            for (int i = 0; i < libre; i++) {
+                if (codigo == productos[i].getCodigo()) {
+                    pos = i;
+                }
+            }
+        }
+        return pos;
+    }
+
+    /*
+    public static Producto leeProducto(Scanner scan) {
         String nombre;
         String descripcion;
         Producto.TipoProducto tipo;
         int codigo;
         int cantidad;
-        codigo= leeNumero(scan, "Introduce codigo: ");
-        scan.nextLine();
-        cantidad= leeNumero(scan, "Introduce cantidad: ");
-        scan.nextLine();
+
+        //codigo = MainTienda.leerEntero(scan,"Introduce codigo: ");
         nombre = leeCadena(scan, "Nombre: ");
+        do {
+            cantidad = MainTienda.leerEntero(scan, "Introduce cantidad: ");
+            scan.nextLine();
+        } while (cantidad < 1);
+
         descripcion = leeCadena(scan, "Descripcion: ");
         tipo = leeTipo(scan);
-          return new Producto(codigo,cantidad,nombre,descripcion,tipo);
+        codigo
+        return new Producto(codigo, cantidad, nombre, descripcion, tipo);
     }
+     */
     
-      public static Producto.TipoProducto leeTipo(Scanner scan) {
+    public static Producto.TipoProducto leeTipo(Scanner scan) {
         int op;
         do {
             System.out.println("Seleccione el tipo: ");
@@ -103,19 +134,13 @@ public class Tienda {
         scan.nextLine();
         return Producto.TipoProducto.values()[op - 1];
     }
-  
-  
-      public static String leeCadena(Scanner scan, String mensaje) {
+
+    public static String leeCadena(Scanner scan, String mensaje) {
         System.out.println(mensaje);
         return (scan.nextLine());
     }
-      
-      public static int leeNumero (Scanner scan,String mensaje){
-          System.out.println(mensaje);
-          return (scan.nextInt());
-      }
-    
-   public void insertaProducto(Producto producto) throws ArrayIndexOutOfBoundsException {
+
+    public void insertaProducto(Producto producto) throws ArrayIndexOutOfBoundsException {
         if (hayEspacio()) {
             productos[libre] = producto;
             ++libre;
@@ -124,35 +149,10 @@ public class Tienda {
         }
     }
 
-         public void borraProductoPorCodigo(int codigo) throws ArrayIndexOutOfBoundsException {
-        if (hayEspacio()) {
-            for (int i = 0; i < libre; i++) {
-                if (codigo==productos[i].getCodigo()) {
-             productos[i] =null;
-            --libre;  
-                }
-            }
-
-        } else {
-            throw new ArrayIndexOutOfBoundsException("Capacidad de contratacion completa.");
-        }
+    public void borraProductoPorPosicion(int pos) {
+        productos[pos].borrarProducto();
     }
-   
-   
-   
-      public void borraProducto(Producto producto) throws ArrayIndexOutOfBoundsException {
-        if (hayEspacio()) {
-            for (int i = 0; i < libre; i++) {
-                if (producto.getCodigo()==productos[i].getCodigo()) {
-             productos[i] = productos[libre-i];
-            --libre;  
-                }
-            }
 
-        } else {
-            throw new ArrayIndexOutOfBoundsException("Capacidad de contratacion completa.");
-        }
-    }
     /**
      *
      * @return Devuelve un String de los Productos del Array;
@@ -170,8 +170,8 @@ public class Tienda {
         }
         return ret.toString();
     }
-    
-        public String getNom() {
+
+    public String getNom() {
         return nombre;
     }
 

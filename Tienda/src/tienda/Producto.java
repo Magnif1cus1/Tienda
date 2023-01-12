@@ -10,6 +10,7 @@ package tienda;
  */
 public class Producto {
 
+    private static int codTotal = 0;
     public static enum TipoProducto {
         MONITORES, LAVADORAS, TELEVISORES, ORDENADORES
     };
@@ -18,14 +19,22 @@ public class Producto {
     private String nombre;
     private String descripcion;
     private TipoProducto tipo;
+    private boolean borrado;
 
     public Producto() {
 
     }
 
-    public void AumentaCant(){
+    public void aumentaCant(){
     this.cantidad++;
     }
+
+    public boolean getBorrado() {
+        return borrado;
+    }
+            
+    public void borrarProducto(){
+    this.borrado=true;}
     
     public int getCodigo() {
         return codigo;
@@ -59,12 +68,13 @@ public class Producto {
         this.tipo = tipo;
     }
 
-    public Producto(int codigo, int cantidad, String nombre, String descripcion, TipoProducto tipo) {
-        this.codigo = codigo;
+    public Producto(int cantidad, String nombre, String descripcion, TipoProducto tipo) {
+        this.codigo = ++codTotal;
         this.cantidad = cantidad;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.tipo = tipo;
+        this.borrado=false;
     }
 
     @Override
@@ -75,6 +85,7 @@ public class Producto {
         sb.append("\nNombre = ").append(nombre);
         sb.append("\nDescripcion = ").append(descripcion);
         sb.append("\nTipo = ").append(tipo);
+        sb.append("\nBorrado = ").append(borrado);
         sb.append("\n");
         return sb.toString();
     }
