@@ -1,0 +1,12 @@
+@startuml
+annotation java.lang.Override
+class java.util.InputMismatchException
+class java.util.Scanner
+class tienda.MainTienda
+class tienda.Producto
+class tienda.Tienda
+tienda.MainTienda ..> java.util.InputMismatchException
+tienda.MainTienda ..> java.util.Scanner
+tienda.Producto ..> java.lang.Override
+tienda.Tienda ..> java.lang.Override
+@enduml

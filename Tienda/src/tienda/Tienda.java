@@ -4,6 +4,8 @@
  */
 package tienda;
 
+import java.util.Scanner;
+
 /**
  *
  * @author DAMDU110
@@ -16,12 +18,14 @@ public class Tienda {
     private int libre;
     private static final int MAX = 100;
 
-    public Tienda(Producto[] productos, String nombre, String dir) {
+    public Tienda(String nombre, String dir) {
         productos = new Producto[MAX];
         this.nombre = nombre;
         this.dir = dir;
         libre = 0;
     }
+
+    
 
     public int getProductosRestantes() {
         return (MAX - libre);
@@ -33,6 +37,9 @@ public class Tienda {
 
     public boolean estaLleno() {
         return (libre == MAX);
+    }
+        public boolean hayProductos() {
+        return (libre > 0);
     }
 
     /**
@@ -54,7 +61,7 @@ public class Tienda {
         return ret;
     }
     
-    public StringBuilder MostrarProductosPorNombre(String nombre){
+    public StringBuilder BuscarProductosPorNombre(String nombre){
         StringBuilder Productos= new StringBuilder();
         if (hayEspacio()) {
             for (int i = 0; i < libre; i++) {
@@ -63,39 +70,109 @@ public class Tienda {
                 }
             }
         }
+        else{
+        Productos.append("No existe el producto en la base de datos.");
+        }
         return Productos;
     }
-
+  public static Producto leeProducto(Scanner scan) {
+        String nombre;
+        String descripcion;
+        Producto.TipoProducto tipo;
+        int codigo;
+        int cantidad;
+        codigo= leeNumero(scan, "Introduce codigo: ");
+        scan.nextLine();
+        cantidad= leeNumero(scan, "Introduce cantidad: ");
+        scan.nextLine();
+        nombre = leeCadena(scan, "Nombre: ");
+        descripcion = leeCadena(scan, "Descripcion: ");
+        tipo = leeTipo(scan);
+          return new Producto(codigo,cantidad,nombre,descripcion,tipo);
+    }
     
+      public static Producto.TipoProducto leeTipo(Scanner scan) {
+        int op;
+        do {
+            System.out.println("Seleccione el tipo: ");
+            for (int i = 0; i < Producto.TipoProducto.values().length; i++) {
+                System.out.println((i + 1) + ".- " + Producto.TipoProducto.values()[i].toString());
+            }
+            op = scan.nextInt();
+        } while (op < 1 || op > Producto.TipoProducto.values().length);
+        scan.nextLine();
+        return Producto.TipoProducto.values()[op - 1];
+    }
+  
+  
+      public static String leeCadena(Scanner scan, String mensaje) {
+        System.out.println(mensaje);
+        return (scan.nextLine());
+    }
+      
+      public static int leeNumero (Scanner scan,String mensaje){
+          System.out.println(mensaje);
+          return (scan.nextInt());
+      }
     
-    public void insertaProducto(Producto producto) throws ArrayIndexOutOfBoundsException {
+   public void insertaProducto(Producto producto) throws ArrayIndexOutOfBoundsException {
         if (hayEspacio()) {
-            if (ExisteProducto(producto)) {
-                producto.AumentaCant();
-            } else {
-                productos[libre] = producto;
-                ++libre;
+            productos[libre] = producto;
+            ++libre;
+        } else {
+            throw new ArrayIndexOutOfBoundsException("Capacidad de contratacion completa.");
+        }
+    }
+
+         public void borraProductoPorCodigo(int codigo) throws ArrayIndexOutOfBoundsException {
+        if (hayEspacio()) {
+            for (int i = 0; i < libre; i++) {
+                if (codigo==productos[i].getCodigo()) {
+             productos[i] =null;
+            --libre;  
+                }
             }
 
         } else {
             throw new ArrayIndexOutOfBoundsException("Capacidad de contratacion completa.");
         }
     }
+   
+   
+   
+      public void borraProducto(Producto producto) throws ArrayIndexOutOfBoundsException {
+        if (hayEspacio()) {
+            for (int i = 0; i < libre; i++) {
+                if (producto.getCodigo()==productos[i].getCodigo()) {
+             productos[i] = productos[libre-i];
+            --libre;  
+                }
+            }
 
+        } else {
+            throw new ArrayIndexOutOfBoundsException("Capacidad de contratacion completa.");
+        }
+    }
     /**
      *
      * @return Devuelve un String de los Productos del Array;
      */
-    public StringBuilder getProductos() {
+    public String getProductos() {
         StringBuilder ret = new StringBuilder();
-        if (hayEspacio()) {
+        if (hayProductos()) {
+
             for (int i = 0; i < libre; i++) {
                 ret.append(productos[i]);
             }
+
         } else {
-            ret.append("No hay Productos en la Tienda actualmente.");
+            ret.append("No hay ningún producto en " + this.getNom());
         }
-        return ret;
+        return ret.toString();
+    }
+    
+        public String getNom() {
+        return nombre;
     }
 
     @Override

@@ -70,11 +70,12 @@ public class Producto {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("\ncodigo=").append(codigo);
-        sb.append("\ncantidad=").append(cantidad);
-        sb.append("\nnombre=").append(nombre);
-        sb.append("\ndescripción=").append(descripcion);
-        sb.append("\ntipo=").append(tipo);
+        sb.append("\nCodigo = ").append(codigo);
+        sb.append("\nCantidad = ").append(cantidad);
+        sb.append("\nNombre = ").append(nombre);
+        sb.append("\nDescripcion = ").append(descripcion);
+        sb.append("\nTipo = ").append(tipo);
+        sb.append("\n");
         return sb.toString();
     }
 }
